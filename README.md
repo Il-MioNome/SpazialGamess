@@ -1,11 +1,12 @@
 # SpazialGamess
 A Pygame zero DD Game where you have to survive 6 alien coming your direction in the space
+# Project made by an Italian 13yr old boy
 
-#In case of problem check if you have the next modules installed on your pc:
+# In case of problem check if you have the next modules installed on your pc:
 - pgzrun
 - pgzero_api_stub
 
-#For the next lines:
+# For the next lines:
 - from pgzero_api_stub import *
 - import pgzrun
 
