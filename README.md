@@ -1,5 +1,6 @@
 # SpazialGamess
 ### Project made by an Italian 13yr old boy
+### Windows ONLY pygame for now! Unless you have python and the module required installed (down in the "readme.md")
 A Pygame zero DD Game where you have to survive 6 alien coming your direction in the space
 
 # In case of problem check if you have the next modules installed on your pc:
