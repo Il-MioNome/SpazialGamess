@@ -16,6 +16,9 @@ alien3 = Actor("nemico", (random.randint(30,770), random.randint(-140, -100)))
 alien4 = Actor("nemico", (random.randint(30,770), random.randint(-180, -140)))
 alien5 = Actor("nemico", (random.randint(30,770), random.randint(-220, -180)))
 alien6 = Actor("nemico", (random.randint(30,770), random.randint(-260, -220)))
+alieno_cattivo = Actor("nemico", (400,450))
+keyboard_illustration = Actor("keyboard_test", (400,300), size=(800,420))
+thought_bubble = Actor("penso_test", (400,150))
 
 score = 0
 bigger_score = 0
@@ -23,13 +26,13 @@ vite = 3
 game_over = False
 collisione = False
 livello = 1
-start = False
+playing = False
 
 def draw():
     global game_over
     global vite
     global score
-    global start
+    global playing
     
     background.draw()
     player.draw()
@@ -39,8 +42,12 @@ def draw():
     alien4.draw()
     alien5.draw()
     alien6.draw()
+    
     if game_over == True:
-        game_over_background.draw()
+        background.draw()
+        screen.draw.text("GAME OVER", (18,260), color="red", fontsize=180)
+        alieno_cattivo.draw()
+        thought_bubble.draw()
         screen.draw.text(f"Max score: {bigger_score}", (325, 190), color="green", fontsize=40)
     else:
         pass
@@ -49,13 +56,12 @@ def draw():
     screen.draw.text(f"Score: {score}", (10, 40), color="green", fontsize=40)
     screen.draw.text(f"Level: {livello}", (10, 70), color="green", fontsize=40)
     screen.draw.text(f"Max score: {bigger_score}", (10, 100), color="green", fontsize=40)
-    
-    if start == False:
-        background.draw()
-        screen.draw.text("Let's Start!", (275, 240), color="green", fontsize=72)
-        screen.draw.text("Press 'ENTER' for start!", (260, 320), color="green", fontsize=40)
-        screen.draw.text("Press 'R' for re-start!", (320, 365), color="green", fontsize=25)
         
+    if playing == False:
+        background.draw()
+        keyboard_illustration.draw()
+        screen.draw.text("Click 'RETURN/ENTER' when you're ready", (275, 443), color="green", fontsize=35)
+    
 def update(dt):
     global score
     global vite
@@ -240,7 +246,7 @@ def on_key_down(key):
     global game_over
     global score
     global livello
-    global start
+    global playing
     
     if keyboard.RETURN and game_over == True:
         vite = 3
@@ -248,12 +254,12 @@ def on_key_down(key):
         livello = 1
         game_over = False
         
-    if keyboard.RETURN and start == False:
+    if keyboard.RETURN and playing == False:
         vite = 3
         score = 0
         livello = 1
         game_over = False
-        start = True
+        playing = True
         #--------------------------------------
         alien1.y = random.randint(-60, -20)
         alien2.y = random.randint(-100, -60)
@@ -262,13 +268,12 @@ def on_key_down(key):
         alien5.y = random.randint(-220, -180)
         alien6.y = random.randint(-260, -220)
         #----------------------------------------
-    
-    if keyboard.r and start == True and game_over == False:
+    if keyboard.r and playing == True and game_over == False:
         vite = 3
         score = 0
         livello = 1
         game_over = False
-        start = True
+        playing = True
         #--------------------------------------
         alien1.x = random.randint(30, 770)
         alien2.x = random.randint(30, 770)
