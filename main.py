@@ -16,9 +16,9 @@ alien3 = Actor("nemico", (random.randint(30,770), random.randint(-140, -100)))
 alien4 = Actor("nemico", (random.randint(30,770), random.randint(-180, -140)))
 alien5 = Actor("nemico", (random.randint(30,770), random.randint(-220, -180)))
 alien6 = Actor("nemico", (random.randint(30,770), random.randint(-260, -220)))
-alieno_cattivo = Actor("nemico", (400,450))
+alieno_cattivo = Actor("nemico_test", (400,450))
 keyboard_illustration = Actor("keyboard_test", (400,300), size=(800,420))
-thought_bubble = Actor("penso_test", (400,150))
+thought_bubble = Actor("penso_medio", (245,500))
 
 score = 0
 bigger_score = 0
@@ -27,12 +27,14 @@ game_over = False
 collisione = False
 livello = 1
 playing = False
+game_pause = False
 
 def draw():
     global game_over
     global vite
     global score
     global playing
+    global game_pause
     
     background.draw()
     player.draw()
@@ -48,6 +50,9 @@ def draw():
         screen.draw.text("GAME OVER", (18,260), color="red", fontsize=180)
         alieno_cattivo.draw()
         thought_bubble.draw()
+        screen.draw.text("Loser!", (225, 480), color="green", fontsize=20)
+        screen.draw.text("Press 'ENTER/RETURN'", (175, 500), color="green", fontsize=20)
+        screen.draw.text("to try again!", (175, 520), color="green", fontsize=20)
         screen.draw.text(f"Max score: {bigger_score}", (325, 190), color="green", fontsize=40)
     else:
         pass
@@ -56,8 +61,13 @@ def draw():
     screen.draw.text(f"Score: {score}", (10, 40), color="green", fontsize=40)
     screen.draw.text(f"Level: {livello}", (10, 70), color="green", fontsize=40)
     screen.draw.text(f"Max score: {bigger_score}", (10, 100), color="green", fontsize=40)
-        
-    if playing == False:
+    
+    if playing == False and game_pause == True and game_over == False:
+        background.draw()
+        screen.draw.text("Game Paused", (220,260), color="red", fontsize=100)
+        screen.draw.text("Press 'ENTER/RETURN' to resume", (200, 320), color="green", fontsize=35)
+    
+    if playing == False and game_pause == False and game_over == False:
         background.draw()
         keyboard_illustration.draw()
         screen.draw.text("Click 'RETURN/ENTER' when you're ready", (275, 443), color="green", fontsize=35)
@@ -69,6 +79,8 @@ def update(dt):
     global game_over
     global collisione
     global livello
+    global game_pause
+    global playing
     
     if (keyboard.left or keyboard.a) and player.x > 30:
         if livello == 1:
@@ -125,7 +137,7 @@ def update(dt):
     if not (player.colliderect(alien1.inflate(-40, -40)) or player.colliderect(alien2.inflate(-40, -40)) or player.colliderect(alien3.inflate(-40, -40)) or player.colliderect(alien4.inflate(-40, -40)) or player.colliderect(alien5.inflate(-40, -40)) or player.colliderect(alien6.inflate(-40, -40))) and collisione:
         collisione = False
     
-    if game_over == False:
+    if game_over == False and game_pause == False and playing == True:
         
         #alieno1
         if alien1.y >= 610:
@@ -227,7 +239,21 @@ def update(dt):
             elif score > 19:
                 livello = 5
                 alien6.y = alien6.y + 14
-        
+
+    elif game_over == False and playing == False and game_pause == True:
+        alien1.y = alien1.y
+        alien1.x = alien1.x
+        alien2.y = alien2.y
+        alien2.x = alien2.x
+        alien3.y = alien3.y
+        alien3.x = alien3.x
+        alien4.y = alien4.y
+        alien4.x = alien4.x
+        alien5.y = alien5.y
+        alien5.x = alien5.x
+        alien6.y = alien6.y
+        alien6.x = alien6.x
+    
     else:
         alien1.y = random.randint(-60, -20)
         alien2.y = random.randint(-100, -60)
@@ -247,14 +273,15 @@ def on_key_down(key):
     global score
     global livello
     global playing
-    
+    global game_pause
+
     if keyboard.RETURN and game_over == True:
         vite = 3
         score = 0
         livello = 1
         game_over = False
         
-    if keyboard.RETURN and playing == False:
+    if keyboard.RETURN and playing == False and game_over == False and (game_pause == True or game_pause == False):
         vite = 3
         score = 0
         livello = 1
@@ -268,7 +295,7 @@ def on_key_down(key):
         alien5.y = random.randint(-220, -180)
         alien6.y = random.randint(-260, -220)
         #----------------------------------------
-    if keyboard.r and playing == True and game_over == False:
+    if keyboard.r and (game_pause == True or game_pause == False) and playing == True and game_over == False:
         vite = 3
         score = 0
         livello = 1
@@ -289,5 +316,15 @@ def on_key_down(key):
         alien5.y = random.randint(-220, -180)
         alien6.y = random.randint(-260, -220)
         #----------------------------------------
+        player.pos = (400,540)
     
+    if keyboard.escape and playing == True and game_over == False and game_pause == False:
+        game_pause = True
+        playing = False
+        
+    if (keyboard.escape or keyboard.RETURN) and playing == True and game_over == False and game_pause == True:
+        game_pause = False
+        playing = True
+        game_over = False
+        
 pgzrun.go()
